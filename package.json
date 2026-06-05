@@ -1,0 +1,25 @@
+{
+  "name": "yandex-tracker-mcp",
+  "version": "0.1.0",
+  "description": "Unofficial MCP server for Yandex Tracker, built for Claude. Not affiliated with Anthropic or Yandex.",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "yandex-tracker-mcp": "dist/index.js" },
+  "files": ["dist", "examples", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0",
+    "undici": "^6.0.0",
+    "vitest": "^2.0.0"
+  }
+}
