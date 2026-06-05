@@ -1,0 +1,3 @@
+{
+  "defaultFields": ["key", "summary", "status.display", "assignee.display"]
+}

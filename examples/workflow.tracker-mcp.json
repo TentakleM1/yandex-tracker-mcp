@@ -1,0 +1,11 @@
+{
+  "defaultQueue": "PROJ",
+  "branchKeyPattern": "([A-Z]+-\\d+)",
+  "commentTemplate": "{{text}}",
+  "transitionAliases": {
+    "progress": "in.?progress|работ",
+    "review": "review|ревь",
+    "done": "done|закр|готов|fixed"
+  },
+  "defaultFields": ["key", "summary", "status.display"]
+}
