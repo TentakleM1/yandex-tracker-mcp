@@ -30,6 +30,16 @@ test("create_issue rejects when no queue available", async () => {
   expect(res.content[0].text).toMatch(/queue/i)
 })
 
+test("create_issue refuses a queue outside the allowlist", async () => {
+  const client = new TrackerClient({ token: "t", orgId: "o", cloudOrg: false })
+  const res = await createIssue.handler(
+    { summary: "New", queue: "OTHER" },
+    ctx(client, { guards: { readOnly: false, allowedQueues: ["PROJ"] } })
+  )
+  expect(res.isError).toBe(true)
+  expect(res.content[0].text).toMatch(/not in the allowed list/i)
+})
+
 test("add_comment applies commentTemplate", async () => {
   agent.get("https://api.tracker.yandex.net").intercept({
     path: "/v2/issues/ABC-1/comments", method: "POST",

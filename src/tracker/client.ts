@@ -26,7 +26,15 @@ export class TrackerClient {
       body: body === undefined ? undefined : JSON.stringify(body)
     })
     const text = await res.text()
-    const data = text ? JSON.parse(text) : undefined
+    let data: any
+    if (text) {
+      try {
+        data = JSON.parse(text)
+      } catch {
+        if (!res.ok) throw new Error(`Tracker API ${res.status}: non-JSON response`)
+        throw new Error(`Tracker API: could not parse response body`)
+      }
+    }
     if (!res.ok) {
       const msg = data?.errorMessages?.join("; ") ?? data?.message ?? res.statusText
       throw new Error(`Tracker API ${res.status}: ${msg}`)

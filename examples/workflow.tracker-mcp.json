@@ -1,6 +1,5 @@
 {
   "defaultQueue": "PROJ",
-  "branchKeyPattern": "([A-Z]+-\\d+)",
   "commentTemplate": "{{text}}",
   "transitionAliases": {
     "progress": "in.?progress|работ",

@@ -94,7 +94,6 @@ An optional per-project config file. The server searches for it by walking up fr
 | Key | Type | Description |
 |---|---|---|
 | `defaultQueue` | string | Queue key used by `create_issue` when `queue` is not provided |
-| `branchKeyPattern` | string | Regex with one capture group to extract an issue key from a branch name |
 | `commentTemplate` | string | Template applied by `add_comment`; use `{{text}}` as the placeholder for the comment body |
 | `transitionAliases` | object | Map of alias name to a regex string matched against transition names or target status names |
 | `defaultFields` | string[] | Default field projection for read tools when no explicit `fields` argument is passed |
@@ -104,7 +103,6 @@ Example (`examples/workflow.tracker-mcp.json`):
 ```json
 {
   "defaultQueue": "PROJ",
-  "branchKeyPattern": "([A-Z]+-\\d+)",
   "commentTemplate": "{{text}}",
   "transitionAliases": {
     "progress": "in.?progress|работ",

@@ -46,6 +46,15 @@ test("move_status resolves alias regex to a transition then executes", async () 
   expect(res.content[0].text).toContain("Review")
 })
 
+test("move_status returns a friendly error on an invalid pattern", async () => {
+  agent.get("https://api.tracker.yandex.net").intercept({ path: "/v2/issues/ABC-1/transitions", method: "GET" })
+    .reply(200, [{ id: "close", display: "Close", to: { display: "Closed" } }])
+  const client = new TrackerClient({ token: "t", orgId: "o", cloudOrg: false })
+  const res = await moveStatus.handler({ key: "ABC-1", to: "[" }, ctx(client))
+  expect(res.isError).toBe(true)
+  expect(res.content[0].text).toMatch(/invalid transition pattern/i)
+})
+
 test("move_status errors with list when nothing matches", async () => {
   agent.get("https://api.tracker.yandex.net").intercept({ path: "/v2/issues/ABC-1/transitions", method: "GET" })
     .reply(200, [{ id: "close", display: "Close", to: { display: "Closed" } }])

@@ -11,7 +11,12 @@ export const moveStatus: ToolDef = {
     const ts = await ctx.client.request<RawTransition[]>("GET", `/issues/${args.key}/transitions`)
     const alias = ctx.config.transitionAliases?.[args.to]
     const pattern = alias ?? args.to
-    const re = new RegExp(pattern, "i")
+    let re: RegExp
+    try {
+      re = new RegExp(pattern, "i")
+    } catch {
+      return textResult(`Invalid transition pattern '${pattern}'`, true)
+    }
     const match = ts.find(t =>
       t.id === args.to || re.test(`${t.display} ${t.to?.display ?? ""}`))
     if (!match) {

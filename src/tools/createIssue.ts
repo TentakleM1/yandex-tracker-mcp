@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { ToolDef, textResult } from "./types.js"
 import { RawIssue } from "../tracker/types.js"
+import { queueAllowed } from "../guards.js"
 
 export const createIssue: ToolDef = {
   name: "create_issue",
@@ -14,6 +15,9 @@ export const createIssue: ToolDef = {
   handler: async (args, ctx) => {
     const queue = args.queue ?? ctx.config.defaultQueue
     if (!queue) return textResult("No queue: pass 'queue' or set defaultQueue in .tracker-mcp.json", true)
+    if (!queueAllowed(ctx.guards, queue)) {
+      return textResult(`Queue '${queue}' is not in the allowed list`, true)
+    }
     const body: Record<string, unknown> = { summary: args.summary, queue }
     if (args.description) body.description = args.description
     const issue = await ctx.client.request<RawIssue>("POST", "/issues", body)

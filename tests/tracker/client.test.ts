@@ -29,6 +29,14 @@ test("non-2xx throws Error with status and tracker message", async () => {
   await expect(client.request("GET", "/issues/NOPE-1")).rejects.toThrow(/404.*Issue not found/)
 })
 
+test("non-JSON error body yields a clear message", async () => {
+  const pool = agent.get("https://api.tracker.yandex.net")
+  pool.intercept({ path: "/v2/issues/ABC-1", method: "GET" })
+    .reply(502, "<html>Bad Gateway</html>", { headers: { "content-type": "text/html" } })
+  const client = new TrackerClient({ token: "t", orgId: "o", cloudOrg: false })
+  await expect(client.request("GET", "/issues/ABC-1")).rejects.toThrow(/502.*non-JSON response/)
+})
+
 test("cloudOrg switches org header name", async () => {
   const pool = agent.get("https://api.tracker.yandex.net")
   pool.intercept({
