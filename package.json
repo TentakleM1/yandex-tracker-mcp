@@ -4,8 +4,15 @@
   "description": "Unofficial MCP server for Yandex Tracker, built for Claude. Not affiliated with Anthropic or Yandex.",
   "license": "MIT",
   "type": "module",
-  "bin": { "yandex-tracker-mcp": "dist/index.js" },
-  "files": ["dist", "examples", "README.md", "LICENSE"],
+  "bin": {
+    "yandex-tracker-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
@@ -14,7 +21,8 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "zod": "^3.23.0"
+    "zod": "^3.23.0",
+    "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
