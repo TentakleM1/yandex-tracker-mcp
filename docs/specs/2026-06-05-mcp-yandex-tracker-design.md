@@ -157,10 +157,15 @@ Every tool: zod input schema; Tracker API errors are caught and returned as text
 
 ## Distribution & docs
 
-- Published to npm as `mcp-yandex-tracker` (name claims no official status).
-- README: what it is; **disclaimer "unofficial, not affiliated with Yandex"**;
-  install; ready-to-paste MCP client config blocks for Claude Desktop, Claude
-  Code, Cursor, VS Code, Windsurf, Zed; how to get an OAuth token; tool
+- GitHub repo: `github.com/TentakleM1/yandex-tracker-mcp`.
+- npm: `yandex-tracker-mcp` if free, else scoped `@tentaklem1/yandex-tracker-mcp`.
+  The name is neutral and claims no official status.
+- "Built for Claude" is communicated in the README tagline and GitHub repo
+  description, not in the package name. The server speaks plain MCP and works
+  with any MCP client; Claude is the primary target audience.
+- README: what it is; **disclaimer "unofficial, not affiliated with Anthropic or
+  Yandex"**; install; ready-to-paste MCP client config blocks for Claude Desktop,
+  Claude Code, Cursor, VS Code, Windsurf, Zed; how to get an OAuth token; tool
   reference; `.tracker-mcp.json` example; env/guard reference.
 - `examples/` with sample configs.
 
@@ -170,10 +175,10 @@ Every tool: zod input schema; Tracker API errors are caught and returned as text
 - Built clean-room from official Tracker API docs; no third-party code copied,
   so no foreign license terms attach.
 - No NDA; authored entirely by the author → ownership clean.
-- README trademark disclaimer for "Yandex Tracker".
+- README trademark disclaimer for both "Yandex Tracker" (Yandex) and "Claude"
+  (Anthropic). The package name avoids both marks to stay safe.
 
 ## Open items (decide before publish, not blocking implementation)
 
-- Final npm package name.
-- npm scope (scoped vs unscoped) and GitHub repo URL.
+- Whether the npm name `yandex-tracker-mcp` is free, else fall back to the scope.
 ```
