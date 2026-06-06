@@ -1,0 +1,7 @@
+#!/bin/sh
+# Strip AI co-author trailers (Claude / Anthropic) from commit messages.
+# Enabled via: git config core.hooksPath .githooks
+msg_file="$1"
+# Drop any "Co-authored-by:" line mentioning Claude or Anthropic (case-insensitive).
+grep -viE '^[[:space:]]*Co-authored-by:.*(claude|anthropic)' "$msg_file" > "$msg_file.tmp" && mv "$msg_file.tmp" "$msg_file"
+exit 0
