@@ -1,0 +1,69 @@
+{
+  "manifest_version": "0.4",
+  "name": "yandex-tracker",
+  "display_name": "Yandex Tracker (Unofficial)",
+  "version": "0.1.0",
+  "description": "Unofficial MCP server for Yandex Tracker, built for Claude. Not affiliated with Anthropic or Yandex.",
+  "long_description": "Unofficial MCP server for Yandex Tracker, built for Claude. Not affiliated with Anthropic or Yandex. \"Yandex Tracker\" is a trademark of Yandex LLC. \"Claude\" is a trademark of Anthropic, PBC. You use this server with your own Yandex Tracker account and your own OAuth token. Read issues, search, view your open issues, read comments and available status transitions; create issues, write comments, move issues between statuses.",
+  "author": {
+    "name": "Dmitry"
+  },
+  "license": "MIT",
+  "keywords": ["yandex", "tracker", "mcp", "issues"],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "TRACKER_TOKEN": "${user_config.TRACKER_TOKEN}",
+        "TRACKER_ORG_ID": "${user_config.TRACKER_ORG_ID}",
+        "TRACKER_CLOUD_ORG": "${user_config.TRACKER_CLOUD_ORG}",
+        "TRACKER_READ_ONLY": "${user_config.TRACKER_READ_ONLY}",
+        "TRACKER_LIMIT_QUEUES": "${user_config.TRACKER_LIMIT_QUEUES}"
+      }
+    }
+  },
+  "user_config": {
+    "TRACKER_TOKEN": {
+      "type": "string",
+      "title": "Yandex OAuth Token",
+      "description": "OAuth token for your Yandex Tracker account.",
+      "sensitive": true,
+      "required": true
+    },
+    "TRACKER_ORG_ID": {
+      "type": "string",
+      "title": "Organization ID",
+      "description": "Your organization id. Sent as X-Org-ID (Yandex 360), or X-Cloud-Org-ID when \"Yandex Cloud organization\" below is enabled.",
+      "required": true
+    },
+    "TRACKER_CLOUD_ORG": {
+      "type": "boolean",
+      "title": "Yandex Cloud organization",
+      "description": "Enable for Yandex Cloud orgs (uses X-Cloud-Org-ID and tracker.yandex.cloud). Leave off for Yandex 360.",
+      "default": false,
+      "required": false
+    },
+    "TRACKER_READ_ONLY": {
+      "type": "boolean",
+      "title": "Read-only mode",
+      "description": "Disable write tools (create issue, add comment, move status).",
+      "default": false,
+      "required": false
+    },
+    "TRACKER_LIMIT_QUEUES": {
+      "type": "string",
+      "title": "Queue allowlist",
+      "description": "Optional. Comma-separated queue keys to restrict access to, e.g. ABC,DEF. Leave empty for all queues.",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}

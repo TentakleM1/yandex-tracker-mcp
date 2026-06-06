@@ -17,7 +17,7 @@ function requireEnv(name: string): string {
 async function main() {
   const token = requireEnv("TRACKER_TOKEN")
   const orgId = requireEnv("TRACKER_ORG_ID")
-  const cloudOrg = process.env.TRACKER_CLOUD_ORG === "1"
+  const cloudOrg = process.env.TRACKER_CLOUD_ORG === "1" || process.env.TRACKER_CLOUD_ORG === "true"
   const client = new TrackerClient({ token, orgId, cloudOrg })
   const config = loadConfig()
   const guards = parseGuards(process.env)

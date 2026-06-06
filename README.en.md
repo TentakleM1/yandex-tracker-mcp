@@ -28,6 +28,32 @@ Unofficial MCP server for Yandex Tracker, built for Claude.
 | `list_transitions` | List available status transitions for an issue | |
 | `move_status` | Move an issue to another status; `to` may be a transition id, status name, or config alias | yes |
 
+## Install for non-technical users (.mcpb)
+
+If you don't use a terminal, this is the easiest path. The `.mcpb` extension installs into Claude Desktop with a single double-click — no separate Node.js install, no JSON config editing, no commands (Claude Desktop ships Node with it).
+
+1. **Download** the `yandex-tracker.mcpb` file (from the project releases page).
+2. **Open Claude Desktop** → **Settings** → **Extensions**.
+3. **Drag** the `yandex-tracker.mcpb` file into that window (or double-click the file — Claude Desktop offers to install it).
+4. Click **Install**.
+5. An **extension settings form** appears — fill in the fields:
+   - **Yandex OAuth Token** — your OAuth token (masked input, stored in the OS secure store). Required.
+   - **Organization ID** — your organization id. Required.
+   - **Yandex Cloud organization** — checkbox. Enable for a Yandex Cloud org (tracker.yandex.cloud). Leave off for Yandex 360.
+   - **Read-only mode** — checkbox. Enable to block all writes (create issue, comment, move status).
+   - **Queue allowlist** — optional. Comma-separated queue keys, e.g. `ABC,DEF`. Empty means all queues.
+6. **Save** — the extension is ready. For where to get the token and org id, see [Getting an OAuth token](#getting-an-oauth-token).
+
+> The token is entered only into the extension form and stays local on your device. The `.mcpb` file contains no tokens — only empty form fields.
+
+### Build the `.mcpb` yourself
+
+```
+npm run build:mcpb
+```
+
+The script does a clean build, installs production dependencies only, and packs the bundle to `releases/yandex-tracker.mcpb`.
+
 ## Install
 
 No installation required. Run directly with:
