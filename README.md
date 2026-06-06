@@ -1,36 +1,38 @@
 # yandex-tracker-mcp
 
-Unofficial MCP server for Yandex Tracker, built for Claude.
+Неофициальный MCP-сервер для Яндекс Трекера, сделанный под Claude.
 
-> **Disclaimer:** This project is not affiliated with, endorsed by, or sponsored by Anthropic or Yandex.
-> "Yandex Tracker" is a trademark of Yandex LLC. "Claude" is a trademark of Anthropic, PBC.
-> You use this server with your own Yandex Tracker account and OAuth token.
+🇬🇧 English version: [README.en.md](README.en.md) · 🏗 Архитектура: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
-## Features
+> **Дисклеймер:** проект не связан с Anthropic или Яндексом, ими не одобрен и не спонсируется.
+> «Яндекс Трекер» — товарный знак ООО «Яндекс». «Claude» — товарный знак Anthropic, PBC.
+> Вы используете сервер со своим аккаунтом Яндекс Трекера и своим OAuth-токеном.
 
-- Read issues, search by query, list your open issues, fetch comments and available transitions
-- Create issues, post comments, and move issues through workflow statuses
-- Configurable transition aliases so you can say "done" instead of a full status name
-- Read-only mode (`TRACKER_READ_ONLY`) and queue allowlist (`TRACKER_LIMIT_QUEUES`) for access control
-- Field projection keeps Claude's context small: only request the fields you need
+## Возможности
 
-## Tools
+- Читать задачи, искать по запросу, смотреть свои открытые задачи, получать комментарии и доступные переходы статусов
+- Создавать задачи, писать комментарии, двигать задачи по статусам
+- Настраиваемые алиасы переходов — можно говорить «done» вместо полного имени статуса
+- Режим «только чтение» (`TRACKER_READ_ONLY`) и белый список очередей (`TRACKER_LIMIT_QUEUES`) для контроля доступа
+- Проекция полей бережёт контекст Claude: запрашиваются только нужные поля
 
-| Tool | Description | Write? |
+## Инструменты
+
+| Инструмент | Описание | Пишет? |
 |---|---|---|
-| `get_issue` | Get one issue by key; pass `fields:["*"]` for the full payload | |
-| `get_issue_url` | Build the web URL for an issue key (no API call) | |
-| `search_issues` | Search using a Yandex Tracker Query Language string; returns compact rows | |
-| `my_issues` | List my open issues (assignee = me, unresolved) | |
-| `create_issue` | Create an issue; uses `defaultQueue` from config if `queue` is omitted | yes |
-| `add_comment` | Add a comment; applies `commentTemplate` from config if set | yes |
-| `list_comments` | List comments on an issue | |
-| `list_transitions` | List available status transitions for an issue | |
-| `move_status` | Move an issue to another status; `to` may be a transition id, status name, or config alias | yes |
+| `get_issue` | Получить задачу по ключу; передайте `fields:["*"]` для полного ответа | |
+| `get_issue_url` | Собрать веб-URL по ключу задачи (без запроса к API) | |
+| `search_issues` | Поиск через язык запросов Яндекс Трекера; возвращает компактные строки | |
+| `my_issues` | Мои открытые задачи (исполнитель = я, не решены) | |
+| `create_issue` | Создать задачу; если `queue` не указан — берёт `defaultQueue` из конфига | да |
+| `add_comment` | Добавить комментарий; применяет `commentTemplate` из конфига, если задан | да |
+| `list_comments` | Список комментариев задачи | |
+| `list_transitions` | Доступные переходы статусов для задачи | |
+| `move_status` | Перевести задачу в другой статус; `to` — id перехода, имя статуса или алиас из конфига | да |
 
-## Install
+## Установка
 
-No installation required. Run directly with:
+Установка не нужна. Запуск напрямую:
 
 ```
 npx -y yandex-tracker-mcp
@@ -38,7 +40,7 @@ npx -y yandex-tracker-mcp
 
 ### Claude Desktop
 
-Add to your `claude_desktop_config.json` (usually `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+Добавьте в `claude_desktop_config.json` (на macOS обычно `~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {
@@ -46,59 +48,61 @@ Add to your `claude_desktop_config.json` (usually `~/Library/Application Support
     "yandex-tracker": {
       "command": "npx",
       "args": ["-y", "yandex-tracker-mcp"],
-      "env": { "TRACKER_TOKEN": "your-token", "TRACKER_ORG_ID": "your-org-id" }
+      "env": { "TRACKER_TOKEN": "ваш-токен", "TRACKER_ORG_ID": "ваш-org-id" }
     }
   }
 }
 ```
 
-## Other MCP clients
+## Другие MCP-клиенты
 
-The same `command` / `args` / `env` block works across MCP-compatible clients. Add it to the relevant config file:
+Тот же блок `command` / `args` / `env` работает во всех MCP-совместимых клиентах. Добавьте его в нужный конфиг:
 
-- **Claude Code** — `~/.claude/claude_desktop_config.json` (or per-project `.claude/mcp.json`)
-- **Cursor** — `.cursor/mcp.json` in your project root
-- **VS Code** — `.vscode/mcp.json` in your project root
+- **Claude Code** — `~/.claude/claude_desktop_config.json` (или `.claude/mcp.json` в проекте)
+- **Cursor** — `.cursor/mcp.json` в корне проекта
+- **VS Code** — `.vscode/mcp.json` в корне проекта
 - **Windsurf** — `~/.codeium/windsurf/mcp_config.json`
-- **Zed** — `~/.config/zed/settings.json` under the `"context_servers"` key
+- **Zed** — `~/.config/zed/settings.json`, ключ `"context_servers"`
 
-## Getting an OAuth token
+> Транспорт сейчас только **stdio**. HTTP-транспорт пока заглушка (не реализован в v1).
 
-1. Create a Yandex OAuth application or use the Tracker API directly:
-   - Yandex 360 (tracker.yandex.ru): follow the auth guide at https://yandex.ru/dev/tracker/
-   - Yandex Cloud (tracker.yandex.cloud): see https://yandex.cloud/docs/tracker/concepts/access
-2. Request scopes that include Tracker read/write access.
-3. Copy the resulting OAuth token into `TRACKER_TOKEN`.
+## Получение OAuth-токена
 
-**Finding your org id:**
+1. Создайте OAuth-приложение Яндекса или работайте с Tracker API напрямую:
+   - Яндекс 360 (tracker.yandex.ru): гайд по авторизации — https://yandex.ru/dev/tracker/
+   - Yandex Cloud (tracker.yandex.cloud): https://yandex.cloud/docs/tracker/concepts/access
+2. Запросите права (scopes) с доступом на чтение/запись в Трекер.
+3. Скопируйте полученный OAuth-токен в `TRACKER_TOKEN`.
 
-- **Yandex 360** — your numeric organization id is shown in the Tracker settings or the Yandex 360 admin console. Set `TRACKER_ORG_ID` to that value. Leave `TRACKER_CLOUD_ORG` unset.
-- **Yandex Cloud** — find the organization id in the Yandex Cloud console. Set `TRACKER_ORG_ID` to that value and set `TRACKER_CLOUD_ORG=1`. The server will switch to `X-Cloud-Org-ID` header and tracker.yandex.cloud URLs automatically.
+**Как найти org id:**
 
-Never commit your token to version control.
+- **Яндекс 360** — числовой id организации виден в настройках Трекера или в админке Яндекс 360. Положите его в `TRACKER_ORG_ID`. `TRACKER_CLOUD_ORG` оставьте пустым.
+- **Yandex Cloud** — id организации в консоли Yandex Cloud. Положите его в `TRACKER_ORG_ID` и задайте `TRACKER_CLOUD_ORG=1`. Сервер сам переключится на заголовок `X-Cloud-Org-ID` и адреса tracker.yandex.cloud.
 
-## Environment variables
+Никогда не коммитьте токен в систему контроля версий.
 
-| Variable | Required | Description |
+## Переменные окружения
+
+| Переменная | Обязательна | Описание |
 |---|---|---|
-| `TRACKER_TOKEN` | yes | Yandex OAuth token with Tracker scope |
-| `TRACKER_ORG_ID` | yes | Organization id (Yandex 360 or Yandex Cloud) |
-| `TRACKER_CLOUD_ORG` | no | Set to `1` to use Yandex Cloud Organization (switches header and base URL) |
-| `TRACKER_READ_ONLY` | no | Set to `true` to disable all write tools (create_issue, add_comment, move_status) |
-| `TRACKER_LIMIT_QUEUES` | no | Comma-separated queue key allowlist, e.g. `ABC,DEF`; operations on other queues are refused |
+| `TRACKER_TOKEN` | да | OAuth-токен Яндекса со scope Трекера |
+| `TRACKER_ORG_ID` | да | Id организации (Яндекс 360 или Yandex Cloud) |
+| `TRACKER_CLOUD_ORG` | нет | `1` — использовать организацию Yandex Cloud (меняет заголовок и базовый URL) |
+| `TRACKER_READ_ONLY` | нет | `true` — отключить все пишущие инструменты (create_issue, add_comment, move_status) |
+| `TRACKER_LIMIT_QUEUES` | нет | Белый список очередей через запятую, напр. `ABC,DEF`; операции с другими очередями отклоняются |
 
-## Project config (`.tracker-mcp.json`)
+## Конфиг проекта (`.tracker-mcp.json`)
 
-An optional per-project config file. The server searches for it by walking up from the current working directory. All keys are optional.
+Необязательный файл конфига на проект. Сервер ищет его, поднимаясь вверх по дереву каталогов от текущей рабочей директории. Все ключи опциональны.
 
-| Key | Type | Description |
+| Ключ | Тип | Описание |
 |---|---|---|
-| `defaultQueue` | string | Queue key used by `create_issue` when `queue` is not provided |
-| `commentTemplate` | string | Template applied by `add_comment`; use `{{text}}` as the placeholder for the comment body |
-| `transitionAliases` | object | Map of alias name to a regex string matched against transition names or target status names |
-| `defaultFields` | string[] | Default field projection for read tools when no explicit `fields` argument is passed |
+| `defaultQueue` | string | Очередь по умолчанию для `create_issue`, когда `queue` не передан |
+| `commentTemplate` | string | Шаблон для `add_comment`; `{{text}}` — место для текста комментария |
+| `transitionAliases` | object | Карта «алиас → regex», который матчится по именам переходов или целевых статусов |
+| `defaultFields` | string[] | Проекция полей по умолчанию для читающих инструментов, если `fields` не передан |
 
-Example (`examples/workflow.tracker-mcp.json`):
+Пример (`examples/workflow.tracker-mcp.json`):
 
 ```json
 {
@@ -113,25 +117,25 @@ Example (`examples/workflow.tracker-mcp.json`):
 }
 ```
 
-### Field projection
+### Проекция полей
 
-Read tools accept an optional `fields: string[]` argument. Resolution order:
+Читающие инструменты принимают необязательный аргумент `fields: string[]`. Порядок разрешения:
 
-1. Explicit `fields` argument passed in the tool call
-2. `defaultFields` from the project config
-3. Built-in compact default (a small set of the most useful fields)
+1. Явный аргумент `fields` в вызове инструмента
+2. `defaultFields` из конфига проекта
+3. Встроенный компактный набор (небольшой список самых полезных полей)
 
-Dotted paths are supported, e.g. `"status.display"`, `"assignee.display"`.
+Поддерживаются вложенные пути через точку, напр. `"status.display"`, `"assignee.display"`.
 
-Pass `fields: ["*"]` to get the full raw payload from the Yandex Tracker API. This is useful for exploring what fields are available, but will consume more context.
+Передайте `fields: ["*"]`, чтобы получить полный сырой ответ от API Яндекс Трекера. Удобно, чтобы посмотреть, какие поля доступны, но съедает больше контекста.
 
-## Security
+## Безопасность
 
-- Your OAuth token is read from the environment and sent only to the Yandex Tracker API. It is never logged or forwarded elsewhere.
-- No tokens or credentials are stored in this repository.
-- Use `TRACKER_READ_ONLY=true` to prevent any write operations.
-- Use `TRACKER_LIMIT_QUEUES` to restrict the server to specific queues and reduce blast radius.
+- OAuth-токен читается из окружения и отправляется только в API Яндекс Трекера. Он нигде не логируется и никуда не пересылается.
+- В репозитории не хранятся токены и учётные данные.
+- `TRACKER_READ_ONLY=true` запрещает любые пишущие операции.
+- `TRACKER_LIMIT_QUEUES` ограничивает сервер конкретными очередями и сужает зону поражения.
 
-## License
+## Лицензия
 
-MIT — see [LICENSE](LICENSE).
+MIT — см. [LICENSE](LICENSE).
