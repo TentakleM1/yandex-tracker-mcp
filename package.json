@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "build:mcpb": "node scripts/build-mcpb.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "start": "node dist/index.js"
@@ -25,6 +26,7 @@
     "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
+    "@anthropic-ai/mcpb": "^2.1.2",
     "@types/node": "^20.0.0",
     "typescript": "^5.5.0",
     "undici": "^6.0.0",
